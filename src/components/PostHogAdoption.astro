@@ -1,0 +1,254 @@
+---
+// Snapshot of this PostHog project's (id 553726) real product usage, pulled via
+// the PostHog MCP tools on 2026-08-25. Not live: refresh these numbers by hand
+// (system.feature_flags, system.experiments, system.surveys, system.data_warehouse_sources,
+// system.insights, system.dashboards, and a 30-day events scan showed zero events
+// of any kind) next time this page is revisited.
+
+type Status = 'active' | 'configured' | 'not-started';
+
+interface Category {
+  name: string;
+  status: Status;
+  detail: string;
+}
+
+const categories: Category[] = [
+  {
+    name: 'Data Warehouse',
+    status: 'active',
+    detail: 'GitHub Issues connected and syncing.',
+  },
+  {
+    name: 'Product Analytics',
+    status: 'configured',
+    detail: '14 insights and 3 dashboards are set up, waiting on live events.',
+  },
+  {
+    name: 'Session Replay',
+    status: 'configured',
+    detail: 'Enabled, waiting on its first recording.',
+  },
+  {
+    name: 'Error Tracking',
+    status: 'configured',
+    detail: 'Enabled, waiting on its first exception.',
+  },
+  {
+    name: 'Web Analytics',
+    status: 'not-started',
+    detail: 'No pageview events captured yet.',
+  },
+  {
+    name: 'Feature Flags',
+    status: 'not-started',
+    detail: 'No flags created yet.',
+  },
+  {
+    name: 'Experiments',
+    status: 'not-started',
+    detail: 'No A/B tests running yet.',
+  },
+  {
+    name: 'Surveys',
+    status: 'not-started',
+    detail: 'Not enabled for this project yet.',
+  },
+  {
+    name: 'LLM Analytics',
+    status: 'not-started',
+    detail: 'No AI generations traced yet.',
+  },
+  {
+    name: 'CDP & Workflows',
+    status: 'not-started',
+    detail: 'No custom destinations or workflows configured.',
+  },
+];
+
+const WEIGHT: Record<Status, number> = { active: 1, configured: 0.5, 'not-started': 0 };
+const STATUS_LABEL: Record<Status, string> = {
+  active: 'Active',
+  configured: 'Configured',
+  'not-started': 'Not started',
+};
+
+const score = categories.reduce((sum, c) => sum + WEIGHT[c.status], 0);
+const percent = Math.round((score / categories.length) * 100);
+---
+
+<div class="pha">
+  <div class="pha-meter-card">
+    <div class="pha-meter-header">
+      <span class="pha-hero">{percent}%</span>
+      <span class="pha-hero-label">of PostHog explored so far</span>
+    </div>
+    <div class="pha-track" role="img" aria-label={`${percent} percent of PostHog products explored`}>
+      <div class="pha-fill" style={`width: ${percent}%`}></div>
+    </div>
+    <ul class="pha-legend">
+      <li><span class="pha-dot active"></span>Active</li>
+      <li><span class="pha-dot configured"></span>Configured, no data yet</li>
+      <li><span class="pha-dot not-started"></span>Not started</li>
+    </ul>
+  </div>
+
+  <div class="pha-grid">
+    {categories.map((c) => (
+      <div class="pha-tile">
+        <div class="pha-tile-head">
+          <span class={`pha-dot ${c.status}`}></span>
+          <span class="pha-tile-name">{c.name}</span>
+        </div>
+        <p class="pha-tile-status">{STATUS_LABEL[c.status]}</p>
+        <p class="pha-tile-detail">{c.detail}</p>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .pha {
+    --pha-surface: #fcfcfb;
+    --pha-border: rgba(11, 11, 11, 0.1);
+    --pha-text-primary: #0b0b0b;
+    --pha-text-secondary: #52514e;
+    --pha-text-muted: #898781;
+    --pha-track: #b7d3f6;
+    --pha-fill: #2a78d6;
+    --pha-status-active: #0ca30c;
+    --pha-status-configured: #fab219;
+    --pha-status-not-started: #898781;
+    margin: 1.5rem 0;
+  }
+  :global(html[data-theme='dark']) .pha {
+    --pha-surface: #1a1a19;
+    --pha-border: rgba(255, 255, 255, 0.1);
+    --pha-text-primary: #ffffff;
+    --pha-text-secondary: #c3c2b7;
+    --pha-text-muted: #898781;
+    --pha-track: #184f95;
+    --pha-fill: #3987e5;
+    --pha-status-active: #0ca30c;
+    --pha-status-configured: #fab219;
+    --pha-status-not-started: #898781;
+  }
+
+  .pha-meter-card {
+    background: var(--pha-surface);
+    border: 1px solid var(--pha-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+
+  .pha-meter-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+  }
+
+  .pha-hero {
+    font-size: clamp(2.5rem, 6vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--pha-text-primary);
+  }
+
+  .pha-hero-label {
+    color: var(--pha-text-secondary);
+    font-size: 1rem;
+  }
+
+  .pha-track {
+    height: 14px;
+    border-radius: 999px;
+    background: var(--pha-track);
+    overflow: hidden;
+  }
+
+  .pha-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: var(--pha-fill);
+  }
+
+  .pha-legend {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    font-size: 0.85rem;
+    color: var(--pha-text-secondary);
+  }
+
+  .pha-legend li {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .pha-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: inline-block;
+  }
+
+  .pha-dot.active {
+    background: var(--pha-status-active);
+  }
+
+  .pha-dot.configured {
+    background: var(--pha-status-configured);
+  }
+
+  .pha-dot.not-started {
+    background: transparent;
+    border: 2px solid var(--pha-status-not-started);
+    width: 6px;
+    height: 6px;
+  }
+
+  .pha-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .pha-tile {
+    background: var(--pha-surface);
+    border: 1px solid var(--pha-border);
+    border-radius: 10px;
+    padding: 0.9rem 1rem;
+  }
+
+  .pha-tile-head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .pha-tile-name {
+    font-weight: 600;
+    color: var(--pha-text-primary);
+  }
+
+  .pha-tile-status {
+    margin: 0.35rem 0 0.15rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--pha-text-secondary);
+  }
+
+  .pha-tile-detail {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--pha-text-secondary);
+  }
+</style>

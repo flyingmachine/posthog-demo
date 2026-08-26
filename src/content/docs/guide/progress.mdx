@@ -1,0 +1,58 @@
+---
+title: Your progress
+description: How much of PostHog this project has explored so far, and what to try next.
+sidebar:
+  order: 8
+---
+
+import { Aside, Card, CardGrid } from '@astrojs/starlight/components';
+import PostHogAdoption from '../../../components/PostHogAdoption.astro';
+import RecommendationTracker from '../../../components/RecommendationTracker.astro';
+
+<RecommendationTracker />
+
+PostHog ships as one platform with many products inside it: analytics, session
+replay, feature flags, experiments, surveys, error tracking, a data warehouse,
+and more. The rest of this guide walked through several of them: events and
+autocapture, insights and dashboards, session replay, feature flags,
+experiments, surveys. That's a real start, not the whole platform. Here is
+where this project actually stands.
+
+<PostHogAdoption />
+
+<Aside type="note" title="Why several products say &quot;no data yet&quot;">
+  This site's PostHog snippet is installed and Session Replay and Error
+  Tracking are switched on, but as of this writing no events had reached this
+  project in the last 30 days. Once the site is deployed and visited, or once
+  you work through the earlier guide pages yourself, Product Analytics,
+  Session Replay, Error Tracking, and Web Analytics will all start filling in
+  on their own, no extra work required.
+</Aside>
+
+## Top 3 things to try next
+
+The rest of the guide covered events, insights, replay, flags, experiments,
+and surveys. Here are three more products this project hasn't touched at
+all.
+
+<CardGrid>
+	<Card title="Error Tracking" icon="error">
+		Already switched on for this project, just waiting on its first
+		exception. Throw one on purpose, an unhandled error in a script tag is
+		enough, and watch it turn into a grouped, symbolicated issue instead of
+		a line buried in the browser console.
+		<a data-recommendation="error-tracking" href="https://posthog.com/docs/error-tracking/installation"> Read the docs</a>.
+	</Card>
+	<Card title="Web Analytics" icon="analytics">
+		The same `$pageview` events already flowing through this site power a
+		dedicated dashboard: top pages, referrers, devices, and countries,
+		with no insight-building required.
+		<a data-recommendation="web-analytics" href="https://posthog.com/docs/web-analytics"> Read the docs</a>.
+	</Card>
+	<Card title="Workflows" icon="signal">
+		Wire up an automation that fires when this site's own `guide_started`
+		event happens, a Slack message, an email, a webhook, without writing
+		a backend to do it.
+		<a data-recommendation="workflows" href="https://posthog.com/docs/cdp"> Read the docs</a>.
+	</Card>
+</CardGrid>
