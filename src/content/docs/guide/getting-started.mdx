@@ -1,11 +1,48 @@
 ---
 title: Getting started
-description: Where this guide picks up once PostHog is wired into the site.
+description: Confirm PostHog is capturing events from this site.
+sidebar:
+  order: 1
 ---
 
 import GuideStartedTracker from '../../../components/GuideStartedTracker.astro';
 
 <GuideStartedTracker />
 
-This is a placeholder page. Once the PostHog wizard has installed and configured
-PostHog in this project, the step-by-step walkthrough pages will go here.
+This site already has PostHog installed. The `posthog-js` snippet loads on every
+page (see `src/components/posthog.astro`), and it started capturing two things
+the moment you clicked "Start the guide" on the home page:
+
+- A `$pageview` event, fired automatically for every page load.
+- A `guide_cta_clicked` custom event, fired by a small script attached to that
+  specific button.
+
+This page fires its own custom event too, `guide_started`, the moment it loads.
+
+## Try it: find your own session
+
+1. Open the [PostHog activity explorer](https://us.posthog.com/project/553726/activity/explore).
+2. Filter by event name, or just scroll: your `$pageview`, `guide_cta_clicked`,
+   and `guide_started` events should already be there. Ingestion is usually a
+   few seconds behind, so refresh if you don't see them right away.
+3. Click into one event and look at its properties. PostHog attaches a lot
+   automatically: browser, OS, screen size, referring page, UTM parameters if
+   any were present, and more, all without you writing a line of code for it.
+
+That's the core loop for the rest of this guide: take an action on this site,
+then go look at what PostHog recorded about it.
+
+## How the install works
+
+The snippet in `posthog.astro` reads two environment variables:
+
+- `PUBLIC_POSTHOG_PROJECT_TOKEN`, the project's public API key. It's public by
+  design, the same way a Google Analytics tracking ID is: it identifies where
+  events go, it doesn't grant access to read them back.
+- `PUBLIC_POSTHOG_HOST`, which region's ingestion endpoint to send events to
+  (`us.i.posthog.com` here).
+
+Locally these live in `.env` (gitignored). In production they're injected at
+build time as GitHub Actions secrets, since this is a static site: there's no
+server around at request time to supply them, so Vite has to bake them into
+the JavaScript bundle when the site is built.

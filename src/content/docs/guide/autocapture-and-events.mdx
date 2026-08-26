@@ -1,0 +1,56 @@
+---
+title: Autocapture and custom events
+description: See the difference between what PostHog captures for free and what you capture on purpose.
+sidebar:
+  order: 2
+---
+
+import AutocaptureEventDemo from '../../../components/AutocaptureEventDemo.astro';
+
+PostHog captures events two ways, and it's worth knowing which is which before
+you start relying on either.
+
+**Autocapture** watches the DOM and records clicks, form submissions, and page
+changes without you writing any tracking code. It's on by default. It's how
+`$pageview` fired on every page of this site without a single `capture()` call
+anywhere in the code.
+
+**Custom events** are ones you name and fire yourself, with `posthog.capture()`,
+for anything specific to your product that autocapture can't infer on its own,
+like "user upgraded their plan" or "video finished playing."
+
+Neither one is strictly better. Autocapture is how you get broad coverage on
+day one. Custom events are how you get precise, business-meaningful signals
+once you know what you actually want to measure.
+
+## Try it: trigger both
+
+<AutocaptureEventDemo />
+
+The first button does nothing but exist. PostHog's autocapture will still pick
+up the click.
+
+The second button has three lines of code behind it: an event listener that
+calls `posthog.capture('guide_custom_event_demo_clicked', { ... })`, the same
+pattern used for the `guide_cta_clicked` event on the home page.
+
+Click both, then go back to the
+[activity explorer](https://us.posthog.com/project/553726/activity/explore)
+and compare what shows up:
+
+- The autocapture click arrives as an `$autocapture` event. Open it and check
+  the `elements` property: PostHog recorded the button's tag, text, and its
+  position in the DOM, enough to know exactly what was clicked without you
+  naming it.
+- The custom event arrives as `guide_custom_event_demo_clicked`, with the
+  `demo` and `source` properties attached exactly as written in the code
+  above.
+
+## Where this matters
+
+Autocapture is cheap to turn on and genuinely useful for retrofitting
+analytics onto a site you didn't originally instrument. But it can't tell you
+*why* someone clicked something, and its event names and properties aren't
+meant to be human-friendly. For anything you'll build a dashboard around or
+alert on, prefer a named custom event with the properties you actually care
+about.

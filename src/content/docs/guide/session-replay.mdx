@@ -1,0 +1,44 @@
+---
+title: Session replay
+description: Watch back what a visitor actually did on this site.
+sidebar:
+  order: 4
+---
+
+Session replay records the DOM as it changes, mouse movement, clicks, scrolls,
+and rebuilds it as a video-like playback. It's not a screen recording; no
+video is actually captured. PostHog stores a stream of DOM mutations and
+replays them client-side when you watch a recording, which is why it stays
+lightweight enough to run on every session by default.
+
+Recording is already turned on for this project, and `posthog-js` starts
+capturing it automatically as soon as it loads, no extra config needed beyond
+the install itself.
+
+## Try it: record yourself, then watch it back
+
+1. Click around this site for thirty seconds or so. Visit a couple of guide
+   pages, click a button, use the search.
+2. Open [Session Replay](https://us.posthog.com/project/553726/replay).
+   Recordings can take a minute or two to finish processing after the session
+   ends, so if yours isn't there yet, give it a moment and refresh.
+3. Find your session (sort by "Recent" if it's not already) and open it.
+4. Watch the playback. Notice the event timeline running alongside the video:
+   every `$pageview`, `$autocapture`, and custom event you fired shows up
+   as a marker you can click to jump straight to that moment.
+
+## What it's actually for
+
+Replay earns its keep on sessions that went wrong: someone who rage-clicked a
+dead button, filled out a form and abandoned it, or hit an error. PostHog
+surfaces some of that automatically, filter the replay list by "rage clicks"
+or "dead clicks" and you'll see sessions where a visitor clicked the same
+spot repeatedly with nothing happening, usually a broken link, a JS error, or
+a button that looks clickable but isn't.
+
+This project also has two Replay Vision scanners running (LLM agents that
+watch recordings on a schedule and flag what they find): one for visibly
+broken pages under `/guide/`, one for rage-click sessions anywhere on the
+site. Their findings, once they have any, land in the
+[Self-driving inbox](https://us.posthog.com/project/553726/inbox) rather
+than the replay list itself.

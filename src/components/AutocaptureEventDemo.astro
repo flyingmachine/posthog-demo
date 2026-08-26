@@ -1,0 +1,17 @@
+---
+// Two demo buttons: one relies purely on autocapture, the other fires a named custom event
+---
+<button id="autocapture-demo-button" class="not-content">
+  Click me (autocapture)
+</button>
+
+<button id="custom-event-demo-button" class="not-content">
+  Click me (custom event)
+</button>
+
+<script is:inline>
+  document.getElementById('custom-event-demo-button')?.addEventListener('click', function () {
+    var props = { demo: true, source: 'autocapture-and-events-page' };
+    window.posthog?.capture('guide_custom_event_demo_clicked', props);
+  });
+</script>

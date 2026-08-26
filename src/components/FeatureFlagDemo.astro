@@ -1,0 +1,25 @@
+---
+// Live-checks the `guide-demo-flag` feature flag and renders its state
+---
+<div id="flag-demo" class="not-content" style="padding: 1rem; border: 1px solid var(--sl-color-gray-5); border-radius: 0.5rem; margin: 1rem 0;">
+  Waiting on flag <code>guide-demo-flag</code>...
+</div>
+
+<script is:inline>
+  function renderFlagDemo() {
+    var el = document.getElementById('flag-demo');
+    if (!el || !window.posthog) return;
+    var enabled = window.posthog.isFeatureEnabled('guide-demo-flag');
+    if (enabled === undefined) {
+      el.textContent = "Flag guide-demo-flag doesn't exist yet, or hasn't loaded. Create it in PostHog, then reload this page.";
+    } else if (enabled) {
+      el.textContent = 'Flag is ON. This is the version of the page you get when guide-demo-flag is enabled for you.';
+    } else {
+      el.textContent = 'Flag is OFF. This is the default version of the page.';
+    }
+  }
+  if (window.posthog) {
+    window.posthog.onFeatureFlags(renderFlagDemo);
+  }
+  document.addEventListener('DOMContentLoaded', renderFlagDemo);
+</script>

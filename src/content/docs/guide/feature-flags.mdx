@@ -1,0 +1,46 @@
+---
+title: Feature flags
+description: Ship a change behind a flag and toggle it without redeploying.
+sidebar:
+  order: 6
+---
+
+import FeatureFlagDemo from '../../../components/FeatureFlagDemo.astro';
+
+A feature flag is a boolean (or a multivariate switch) that PostHog decides
+the value of, at request time, instead of your code deciding it at build
+time. The point is separating "deploy" from "release": the code for a
+feature can go out in a build days before anyone actually sees it, and you
+turn it on with a toggle in PostHog rather than a new deploy.
+
+## Try it: create a flag and watch this page react
+
+<FeatureFlagDemo />
+
+1. Open [Feature Flags](https://us.posthog.com/project/553726/feature_flags)
+   and create a new one with the key **`guide-demo-flag`**.
+2. Set release conditions to 100% of users (or add yourself specifically by
+   your distinct ID, shown on the [Getting started](/posthog-demo/guide/getting-started/)
+   page's events in the activity explorer) and save it as enabled.
+3. Reload this page. The box above re-checks the flag on load and should
+   flip to "Flag is ON."
+4. Go back and disable the flag, reload again, and watch it flip back.
+
+That reload is standing in for what would normally be an instant update:
+`posthog-js` also supports polling and can react to flag changes without a
+full page reload, but a reload is the simplest way to see the effect here.
+
+## Why this is useful beyond A/B tests
+
+Flags aren't only for experiments. Common uses:
+
+- **Kill switches.** Wrap a risky new code path in a flag so you can turn it
+  off from PostHog the moment something looks wrong, no rollback deploy
+  needed.
+- **Staged rollouts.** Release to 5% of users, watch error tracking and
+  replay for a day, then dial it up.
+- **Targeting.** Ship a feature only to users matching a cohort or property,
+  internal team members, a specific plan tier, users in a certain country.
+
+The next page covers the case where a flag isn't just on or off, it's an
+experiment you're measuring.

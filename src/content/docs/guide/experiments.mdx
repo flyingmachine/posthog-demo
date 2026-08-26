@@ -1,0 +1,55 @@
+---
+title: Experiments
+description: Turn a feature flag into a measured A/B test.
+sidebar:
+  order: 7
+---
+
+An experiment in PostHog is a feature flag with a hypothesis and a metric
+attached. The flag decides which variant a visitor gets; the metric decides
+whether the variant that changed behavior actually did, and by how much,
+rather than just "it feels like it helped."
+
+With a single visitor (you, clicking around a demo site) an experiment here
+can't reach statistical significance. What you can do is set one up end to
+end and see exactly what PostHog is tracking, which is the useful part for
+understanding the mechanism before you run a real one on real traffic.
+
+## Try it: set one up
+
+1. Open [Experiments](https://us.posthog.com/project/553726/experiments) and
+   create a new one.
+2. Give it a hypothesis, something like "A more direct button label increases
+   clicks on the custom event demo button."
+3. It'll create a feature flag behind the scenes (or let you attach an
+   existing one). Use two variants: `control` and `test`.
+4. For the primary metric, pick a count of the
+   `guide_custom_event_demo_clicked` event from the
+   [autocapture and events](/posthog-demo/guide/autocapture-and-events/) page,
+   the same one wired up earlier in this guide.
+5. Launch it.
+
+At this point PostHog is doing two things: assigning each new visitor to
+`control` or `test` (and remembering which, so they don't flip-flop on
+reload), and counting how often `guide_custom_event_demo_clicked` fires in
+each group.
+
+## What launching it doesn't do
+
+Launching the experiment doesn't change what this site's button says or does.
+The code has to actually check the variant and act on it, the same way the
+feature flag demo on the previous page checked `isFeatureEnabled`, except
+here you'd call `posthog.getFeatureFlag('your-experiment-key')` and branch on
+`'control'` vs `'test'`. This site doesn't have that wiring for this
+particular experiment, since there's nothing here to genuinely A/B test
+against a single visitor. The point of this exercise was seeing the
+setup, not running a real test.
+
+## Reading results
+
+On a real experiment with real traffic, the results page shows each variant's
+conversion rate on your primary metric, a confidence interval, and whether
+the difference is likely to be real or just noise. PostHog won't tell you to
+ship a variant until the interval is tight enough to trust, running an
+experiment for two hours on ten visitors and declaring a winner is the
+single most common way experiments go wrong.

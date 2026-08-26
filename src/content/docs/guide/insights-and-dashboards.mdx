@@ -1,0 +1,51 @@
+---
+title: Insights and dashboards
+description: Turn the events you've generated into a chart.
+sidebar:
+  order: 3
+---
+
+An **insight** is PostHog's name for a single chart: a trend line, a funnel, a
+breakdown by property, whatever. A **dashboard** is a page of insights pinned
+together. Neither one is a snapshot: an insight is a live query, so it keeps
+updating as new events arrive.
+
+By this point you've generated a handful of events just by clicking through
+this site: `$pageview`, `guide_cta_clicked`, `guide_started`, `$autocapture`,
+`guide_custom_event_demo_clicked`. That's enough to build something real.
+
+## Try it: build a trend
+
+1. Open [Insights](https://us.posthog.com/project/553726/insights) and click
+   **New insight**.
+2. Leave it as a trends chart. In the series picker, change the event from
+   "All events" to `guide_started`.
+3. Set the date range to "Last 24 hours" (or whatever window covers your
+   testing) so the bars are dense enough to read.
+4. Save it. Give it a name like "Guide starts".
+
+You've just built a chart that answers "how many times has someone reached
+the getting-started page." Trivial with five events, but the exact same
+pattern, one event, one series, filtered and broken down, is how most
+real product dashboards get built. The complexity in a mature PostHog
+setup is almost never in the charting; it's in picking the right events to
+track in the first place.
+
+## Try it: add a breakdown
+
+Edit the insight again and add a breakdown by `$browser` or `$device_type`.
+Same event, same date range, but now split into one line per value. This is
+usually the fastest way to find out something didn't work the way you
+assumed, a feature that quietly fails on Safari, traffic that's entirely
+mobile when you designed for desktop, that kind of thing.
+
+## Try it: pin it to a dashboard
+
+1. From the insight, use **Add to dashboard**, and create a new dashboard
+   called something like "Exploring PostHog".
+2. Go build a second insight (try a funnel: `$pageview` → `guide_started` →
+   `guide_custom_event_demo_clicked`) and pin that one too.
+
+A funnel like that tells you, out of everyone who loaded a page, what
+fraction made it all the way through the sequence you defined, and where
+they dropped off between steps.

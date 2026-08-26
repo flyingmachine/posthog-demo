@@ -1,0 +1,45 @@
+---
+title: Surveys
+description: Ask visitors a question, no code changes required.
+sidebar:
+  order: 8
+---
+
+Surveys are the one PostHog feature that ships entirely from the dashboard.
+Once `posthog-js` is installed, which it already is on this site, creating a
+survey and setting it live is enough to make it appear. No deploy, no code
+change.
+
+## Try it: create one and see it appear
+
+1. Open [Surveys](https://us.posthog.com/project/553726/surveys) and create
+   a new one. A simple open-text or single-choice survey is easiest to see
+   working quickly.
+2. For display conditions, target this site's URL
+   (`flyingmachine.github.io/posthog-demo`) so it doesn't try to show up
+   anywhere else.
+3. Set it to launch immediately, and choose a trigger you can satisfy
+   yourself right away, "on page load" is the simplest for testing, though
+   in a real product you'd more often trigger off a specific action, like
+   ten seconds after landing on a pricing page, or right after a checkout
+   completes.
+4. Save and launch it.
+5. Reload any page on this site. The survey should appear, PostHog polls for
+   active surveys shortly after the SDK loads.
+
+## Why this one's different
+
+Every other feature in this guide, events, flags, replay, needed at least a
+line or two of application code to hook into. Surveys don't, because the
+survey widget itself is part of the `posthog-js` bundle: PostHog ships the
+question, the response form, and the styling, and just asks your page for
+permission to render on top of it. That's a meaningfully different
+integration model from the rest of the product, worth noticing now that
+you've seen both.
+
+Responses land back in PostHog as `survey sent` events (with the response
+text or choice as a property), so they show up in the
+[activity explorer](https://us.posthog.com/project/553726/activity/explore)
+right alongside everything else you've generated in this guide, and you can
+build an insight on them exactly the way you did on
+[Insights and dashboards](/posthog-demo/guide/insights-and-dashboards/).
