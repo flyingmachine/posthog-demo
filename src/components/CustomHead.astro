@@ -3,7 +3,5 @@ import type { Props } from '@astrojs/starlight/props';
 import Default from '@astrojs/starlight/components/Head.astro';
 import PostHog from './posthog.astro';
 ---
-<Default {...Astro.props}>
-  <PostHog />
-  <slot />
-</Default>
+<Default {...Astro.props}><slot /></Default>
+<PostHog />
