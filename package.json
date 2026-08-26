@@ -13,7 +13,8 @@
   },
   "dependencies": {
     "@astrojs/starlight": "^0.41.9",
-    "astro": "^7.2.7"
+    "astro": "^7.2.7",
+    "posthog-js": "^1.419.4"
   },
   "allowScripts": {
     "esbuild": true

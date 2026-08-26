@@ -1,0 +1,13 @@
+---
+// Tracks clicks on the "Start the guide" CTA on the home page
+---
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', function () {
+    var ctaLink = document.querySelector('a[href*="getting-started"]');
+    if (ctaLink) {
+      ctaLink.addEventListener('click', function () {
+        window.posthog?.capture('guide_cta_clicked');
+      });
+    }
+  });
+</script>
